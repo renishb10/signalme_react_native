@@ -11,6 +11,7 @@ import {Platform, StyleSheet, Text, View} from 'react-native';
 
 //Custom Components
 import FetchLocation from './src/components/FetchLocation';
+import UserMap from './src/components/UsersMap';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -22,15 +23,32 @@ const instructions = Platform.select({
 type Props = {};
 export default class App extends Component<Props> {
 
+  state = {
+    userLocation: null
+  }
+
   getUserLocationHandler = () => {
-    console.log('Hello!');
+    console.log(1);
+    navigator.geolocation.getCurrentPosition(pos => {
+      	this.setState({
+          userLocation: {
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }
+        })
+    }, err => {
+      console.log(err);
+    })
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>RenishB</Text>
+        <Text style={styles.welcome}>Renish B</Text>
         <FetchLocation onGetLocation={this.getUserLocationHandler} />
+        <UserMap userLocation={this.state.userLocation}/>
       </View>
     );
   }
